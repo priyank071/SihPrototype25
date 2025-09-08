@@ -82,7 +82,7 @@ const TouristDashboard = () => {
       <div className="bg-card border-b shadow-soft">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-           <img src="/logo.png" alt="" className="w-16 h-16" />
+           <img src="/logo.png" alt="" className="w-20 h-20" />
             <div>
               <h1 className="text-2xl font-bold">TourShield Dashboard</h1>
               <p className="text-sm text-muted-foreground">Welcome back, Tourist</p>
