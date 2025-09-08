@@ -53,7 +53,7 @@ const TouristRegister = () => {
       setStep(3);
       
       toast({
-        title: "Registration Successful! 🎉",
+        title: "Registration Successful! ",
         description: "Your blockchain digital ID has been generated successfully.",
       });
     }, 2000);
@@ -61,7 +61,8 @@ const TouristRegister = () => {
 
   const handleCompletRegistration = () => {
     toast({
-      title: "Welcome to TourShield! 🛡️",
+      title: "Welcome to TourShield! ",
+      
       description: "You can now access your tourist dashboard.",
     });
     navigate("/tourist/dashboard");
@@ -80,7 +81,7 @@ const TouristRegister = () => {
           </Link>
           
           <div className="flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary" />
+            <img src="/logo.png" alt="" className="h-10 w-10"/>
             <span className="font-bold text-lg">TourShield</span>
           </div>
         </div>

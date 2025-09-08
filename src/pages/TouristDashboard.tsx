@@ -25,16 +25,16 @@ const TouristDashboard = () => {
   const [isOnline, setIsOnline] = useState(true);
   const [currentLocation, setCurrentLocation] = useState("Kaziranga National Park, Assam");
   const [sosActive, setSosActive] = useState(false);
+  const [language, setLanguage] = useState("EN");
   const { toast } = useToast();
 
-  // Simulate real-time safety score updates
   useEffect(() => {
     const interval = setInterval(() => {
       setSafetyScore(prev => {
-        const variation = Math.floor(Math.random() * 10) - 5; // ±5 variation
+        const variation = Math.floor(Math.random() * 10) - 5;
         return Math.max(0, Math.min(100, prev + variation));
       });
-    }, 30000); // Update every 30 seconds
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
@@ -45,20 +45,19 @@ const TouristDashboard = () => {
       title: "🚨 SOS Alert Activated",
       description: "Emergency services, police, and your emergency contacts have been notified with your current location.",
     });
-    
-    // Simulate SOS deactivation after 10 seconds
+
     setTimeout(() => {
       setSosActive(false);
     }, 10000);
   };
 
-  const getSafetyScoreColor = (score: number) => {
+  const getSafetyScoreColor = (score) => {
     if (score >= 80) return "text-success";
     if (score >= 60) return "text-warning";
     return "text-danger";
   };
 
-  const getSafetyScoreVariant = (score: number) => {
+  const getSafetyScoreVariant = (score) => {
     if (score >= 80) return "default";
     if (score >= 60) return "secondary";
     return "destructive";
@@ -70,49 +69,45 @@ const TouristDashboard = () => {
     { id: 3, type: "success", message: "Safe zone: Visitor Center area", time: "30 min ago" }
   ];
 
+  const translations = {
+    EN: { emergency: "Emergency SOS", shareLocation: "Share Location", digitalId: "Digital ID" },
+    हिंदी: { emergency: "आपातकालीन SOS", shareLocation: "स्थान साझा करें", digitalId: "डिजिटल आईडी" },
+    অসমীয়া: { emergency: "জৰুৰী SOS", shareLocation: "অৱস্থান শ্বেয়াৰ কৰক", digitalId: "ডিজিটেল ID" },
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative">
+
       {/* Header */}
       <div className="bg-card border-b shadow-soft">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Shield className="h-8 w-8 text-primary" />
-              <div>
-                <h1 className="text-2xl font-bold">TourShield Dashboard</h1>
-                <p className="text-sm text-muted-foreground">Welcome back, Tourist</p>
-              </div>
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+           <img src="/logo.png" alt="" className="w-16 h-16" />
+            <div>
+              <h1 className="text-2xl font-bold">TourShield Dashboard</h1>
+              <p className="text-sm text-muted-foreground">Welcome back, Tourist</p>
             </div>
-            
+          </div>
+          <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                {isOnline ? (
-                  <Wifi className="h-4 w-4 text-success" />
-                ) : (
-                  <WifiOff className="h-4 w-4 text-danger" />
-                )}
-                <span className="text-sm">{isOnline ? "Online" : "Offline"}</span>
-              </div>
-              
-              <Link to="/profile">
-                <Button variant="ghost" size="icon">
-                  <User className="h-4 w-4" />
-                </Button>
-              </Link>
-              
-              <Button variant="ghost" size="icon">
-                <Settings className="h-4 w-4" />
-              </Button>
+              {isOnline ? <Wifi className="h-4 w-4 text-success" /> : <WifiOff className="h-4 w-4 text-danger" />}
+              <span className="text-sm">{isOnline ? "Online" : "Offline"}</span>
             </div>
+            <Link to="/profile">
+              <Button variant="ghost" size="icon">
+                <User className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon">
+              <Settings className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6">
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Safety Score Card */}
             <Card className="shadow-medium">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
@@ -138,7 +133,6 @@ const TouristDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Live Location & Map */}
             <Card className="shadow-medium">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -156,27 +150,26 @@ const TouristDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Quick Actions */}
             <div className="grid md:grid-cols-2 gap-4">
               <Card className="shadow-medium">
                 <CardHeader>
                   <CardTitle className="text-lg">Emergency Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
-                    variant={sosActive ? "destructive" : "sos"} 
-                    size="lg" 
+                  <Button
+                    variant="destructive"
+                    size="lg"
                     className="w-full"
                     onClick={handleSOSPress}
                     disabled={sosActive}
                   >
                     <PhoneCall className="mr-2 h-5 w-5" />
-                    {sosActive ? "SOS Active - Help Coming!" : "Emergency SOS"}
+                    {sosActive ? "SOS Active - Help Coming!" : translations[language].emergency}
                   </Button>
-                  
+
                   <Button variant="outline" size="lg" className="w-full">
                     <MapPin className="mr-2 h-4 w-4" />
-                    Share Location
+                    {translations[language].shareLocation}
                   </Button>
                 </CardContent>
               </Card>
@@ -187,14 +180,13 @@ const TouristDashboard = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Digital ID:</span>
+                    <span className="text-sm text-muted-foreground">{translations[language].digitalId}</span>
                     <span className="font-mono text-sm">TS87654321</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Last Update:</span>
                     <span className="text-sm flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      Just now
+                      <Clock className="h-3 w-3" /> Just now
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -206,9 +198,7 @@ const TouristDashboard = () => {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Nearby Alerts */}
             <Card className="shadow-medium">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -217,7 +207,7 @@ const TouristDashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {nearbyAlerts.map((alert) => (
+                {nearbyAlerts.map(alert => (
                   <div key={alert.id} className="border-l-4 border-l-primary/50 pl-3 py-2">
                     <p className="text-sm font-medium">{alert.message}</p>
                     <p className="text-xs text-muted-foreground">{alert.time}</p>
@@ -226,7 +216,6 @@ const TouristDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Health Status */}
             <Card className="shadow-medium">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -250,22 +239,37 @@ const TouristDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Language Settings */}
             <Card className="shadow-medium">
               <CardHeader>
                 <CardTitle className="text-lg">Language</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-2">
-                  <Button variant="outline" size="sm">EN</Button>
-                  <Button variant="default" size="sm">हिं</Button>
-                  <Button variant="outline" size="sm">অসমীয়া</Button>
+                  {["EN", "हिंदी", "অসমীয়া"].map(lang => (
+                    <Button
+                      key={lang}
+                      variant={language === lang ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setLanguage(lang)}
+                    >
+                      {lang}
+                    </Button>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+
+      {/* Fixed Circular SOS Button */}
+      <button
+        className={`fixed bottom-6 right-6 w-16 h-16 bg-red-600 text-white rounded-full shadow-lg flex items-center justify-center z-50`}
+        onClick={handleSOSPress}
+        disabled={sosActive}
+      >
+        <PhoneCall className="h-6 w-6" />
+      </button>
     </div>
   );
 };

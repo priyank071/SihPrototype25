@@ -78,8 +78,8 @@ const AuthorityLogin = () => {
 
         <Card className="shadow-strong">
           <CardHeader className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Shield className="h-12 w-12 text-primary" />
+            <div className="flex items-center justify-center ">
+              <img src="/logo.png" alt="" className="h-32 w-32" />
             </div>
             <CardTitle className="text-2xl">Authority Login</CardTitle>
             <CardDescription>
